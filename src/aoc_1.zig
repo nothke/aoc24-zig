@@ -45,5 +45,29 @@ pub fn main() !void {
         std.debug.print("s: {} '{}'\n", .{ v1, v2 });
     }
 
-    std.debug.print("Total distance is: {}", .{totalDistance});
+    std.debug.print("Total distance is: {}\n", .{totalDistance});
+
+    // Part 2:
+
+    var hashMap = std.AutoHashMap(i32, u32).init(alloc);
+    defer hashMap.deinit();
+
+    var similarityScore: u32 = 0;
+    for (list1.items) |n| {
+        if (hashMap.contains(n))
+            continue;
+
+        var times: u32 = 0;
+        for (list2.items) |n2| {
+            if (n == n2) {
+                times += 1;
+            }
+        }
+
+        similarityScore += @as(u32, @intCast(n)) * times;
+
+        try hashMap.put(n, 0);
+    }
+
+    std.debug.print("Similarity score is: {}\n", .{similarityScore});
 }
