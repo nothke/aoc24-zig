@@ -23,8 +23,6 @@ pub fn main() !void {
 
         var secondRow = false;
         while (wordIter.next()) |word| {
-            secondRow = !secondRow;
-
             const n = try std.fmt.parseInt(i32, word, 10);
 
             if (!secondRow) {
@@ -32,15 +30,17 @@ pub fn main() !void {
             } else {
                 try list2.append(n);
             }
+
+            secondRow = !secondRow;
         }
     }
 
     std.mem.sort(i32, list1.items, {}, std.sort.asc(i32));
     std.mem.sort(i32, list2.items, {}, std.sort.asc(i32));
 
-    var totalDistance: i32 = 0;
+    var totalDistance: u32 = 0;
     for (list1.items, list2.items) |v1, v2| {
-        totalDistance += v2 - v1;
+        totalDistance += @abs(v2 - v1);
 
         std.debug.print("s: {} '{}'\n", .{ v1, v2 });
     }
